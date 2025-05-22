@@ -28,6 +28,38 @@ def test_create_user(client):
     }
 
 
+def test_create_user_should_return_conflit_for_existing_username(client, user):
+    response = client.post(
+        '/users/',
+        json={
+            'username': user.username,
+            'email': 'other_email@example.com',
+            'password': 'secret123',
+        },
+    )
+
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response.json() == {
+        'detail': 'Username already exists',
+    }
+
+
+def test_create_user_should_return_conflit_for_existing_email(client, user):
+    response = client.post(
+        '/users/',
+        json={
+            'username': 'User',
+            'email': user.email,
+            'password': 'secret123',
+        },
+    )
+
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response.json() == {
+        'detail': 'Email already exists',
+    }
+
+
 def test_read_users(client):
     response = client.get('/users/')
 
