@@ -94,7 +94,7 @@ def test_read_unexisting_user_should_return_not_found(client):
 
 def test_update_user(client, user):
     response = client.put(
-        '/users/1',
+        f'/users/{user.id}',
         json={
             'username': 'Other User',
             'email': 'other_user@example.com',
@@ -150,7 +150,7 @@ def test_update_integrity_error(client, user):
 
 
 def test_delete_user(client, user):
-    response = client.delete('users/1')
+    response = client.delete(f'users/{user.id}')
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'User deleted'}
