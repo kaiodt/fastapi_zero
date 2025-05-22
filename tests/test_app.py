@@ -119,7 +119,7 @@ def test_update_integrity_error(client, user):
     }
 
 
-def test_delete_user(client):
+def test_delete_user(client, user):
     response = client.delete('users/1')
 
     assert response.status_code == HTTPStatus.OK
