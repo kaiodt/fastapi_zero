@@ -9,7 +9,7 @@ from sqlalchemy.pool import StaticPool
 
 from fastapi_zero.app import app
 from fastapi_zero.database import get_session
-from fastapi_zero.models import table_registry
+from fastapi_zero.models import User, table_registry
 
 
 @pytest.fixture
@@ -38,6 +38,17 @@ def session():
         yield session
 
     table_registry.metadata.drop_all(engine)
+
+
+@pytest.fixture
+def user(session):
+    user = User(username='Test', email='test@test.com', password='secret')
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return user
 
 
 @contextmanager
