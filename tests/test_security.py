@@ -15,9 +15,9 @@ def test_jwt():
     assert 'exp' in decoded
 
 
-def test_get_current_user_invalid_jwt_token(client, user):
+def test_get_current_user_invalid_jwt_token(client):
     response = client.delete(
-        f'/users/{user.id}',
+        '/users/1',
         headers={'Authorization': 'Bearer invalid-token'},
     )
 
@@ -25,13 +25,13 @@ def test_get_current_user_invalid_jwt_token(client, user):
     assert response.json() == {'detail': 'Could not validate credentials'}
 
 
-def test_get_current_user_missing_email(client, user):
+def test_get_current_user_missing_email(client):
     bad_token = create_access_token(
         data={'no-email': 'test'},
     )
 
     response = client.delete(
-        f'/users/{user.id}',
+        '/users/1',
         headers={'Authorization': f'Bearer {bad_token}'},
     )
 
@@ -39,13 +39,13 @@ def test_get_current_user_missing_email(client, user):
     assert response.json() == {'detail': 'Could not validate credentials'}
 
 
-def test_get_current_user_unexisting_user(client, user):
+def test_get_current_user_unexisting_user(client):
     bad_token = create_access_token(
         data={'sub': 'unknown@test.com'},
     )
 
     response = client.delete(
-        f'/users/{user.id}',
+        '/users/1',
         headers={'Authorization': f'Bearer {bad_token}'},
     )
 

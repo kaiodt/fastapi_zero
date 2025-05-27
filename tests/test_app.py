@@ -150,9 +150,9 @@ def test_update_user(client, user, token):
     }
 
 
-def test_update_other_user_should_return_forbidden(client, user, token):
+def test_update_other_user_should_return_forbidden(client, token):
     response = client.put(
-        f'/users/{user.id + 1}',
+        '/users/100',
         headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'Unknown',
@@ -201,9 +201,9 @@ def test_delete_user(client, user, token):
     assert response.json() == {'message': 'User deleted'}
 
 
-def test_delete_other_user_should_return_forbidden(client, user, token):
+def test_delete_other_user_should_return_forbidden(client, token):
     response = client.delete(
-        f'/users/{user.id + 1}',
+        '/users/100',
         headers={'Authorization': f'Bearer {token}'},
     )
 
