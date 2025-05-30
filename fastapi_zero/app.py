@@ -94,6 +94,7 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
     session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
 ):
     users = session.scalars(select(User).offset(skip).limit(limit)).all()
 
@@ -101,7 +102,11 @@ def read_users(
 
 
 @app.get('/users/{user_id}', response_model=UserPublic)
-def read_user(user_id: int, session: Session = Depends(get_session)):
+def read_user(
+    user_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
     db_user = session.scalar(select(User).where(User.id == user_id))
 
     if not db_user:
